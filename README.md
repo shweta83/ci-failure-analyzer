@@ -10,7 +10,7 @@ A GitHub Action that detects common CI failures and provides actionable fixes.
 ## Usage
 
 ```yaml
-- uses: your-username/ci-failure-analyzer@v1
+- uses: shweta83/ci-failure-analyzer@v1
   with:
     log-file: test_output.log
 
