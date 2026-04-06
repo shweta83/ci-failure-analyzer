@@ -36,8 +36,15 @@ jobs:
         if: failure()
         run: cat failure_summary.md
 
-      - name: Comment PR
+      - name: Upload summary
         if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failure-summary
+          path: failure_summary.md
+
+      - name: Comment PR
+        if: failure() && github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v3
         with:
           path: failure_summary.md
