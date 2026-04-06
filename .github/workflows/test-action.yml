@@ -1,0 +1,43 @@
+name: Test CI Failure Analyzer
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  pull-requests: write
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Generate failure log
+        run: |
+          echo "Traceback (most recent call last):" > test_output.log
+          echo "ModuleNotFoundError: No module named 'requests'" >> test_output.log
+          exit 1
+
+      - name: Run Failure Analyzer
+        if: failure()
+        uses: ./
+        with:
+          log-file: test_output.log
+
+      - name: Show summary
+        if: failure()
+        run: cat failure_summary.md
+
+      - name: Comment PR
+        if: failure()
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: failure_summary.md
