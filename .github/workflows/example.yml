@@ -1,0 +1,38 @@
+name: Example Usage
+
+on:
+    pull_request:
+
+jobs: 
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v5
+            
+            - name: Setup Python
+              uses: actions/setup-python@v6
+              with:
+                python-version: '3.13'
+
+            - name: Install dependencies
+              run: pip install pytest
+             
+            - name: Run tests
+              run: |
+                pytest -v 2>&1 | tee test_output.log
+
+            - name: Run CI Failure Analyzer
+              if: failure()
+              uses: ./   # using local action
+              with:
+                log-file: test_output.log
+            
+            - name: Comment PR
+              if: failure()
+              uses: marocchino/sticky-pull-request-comment@v2
+              with:
+                path: failure_summary.md
+
+
+       

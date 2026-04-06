@@ -1,0 +1,16 @@
+name: "CI Failure Analyzer"
+description: "Analyze CI Failures and suggest fixes for dependency and setup issues."
+
+inputs:
+    log-file: 
+        description: "Path to CI log file"
+        required: true
+        default: "test_output.log"
+
+runs:
+    using: "composite"
+    steps:
+        - name: Run analyzer
+          run: analyze_failure.py ${{ inputs.log-file }}
+          shell: bash
+          
