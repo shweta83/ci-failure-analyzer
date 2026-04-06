@@ -30,7 +30,7 @@ jobs:
             
             - name: Comment PR
               if: failure()
-              uses: marocchino/sticky-pull-request-comment@v2
+              uses: marocchino/sticky-pull-request-comment@v3
               with:
                 path: failure_summary.md
 
